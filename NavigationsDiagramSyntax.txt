@@ -1,0 +1,78 @@
+@startuml
+
+title Navigationsdiagram
+[*] --> notLoggedIn
+state notLoggedIn
+
+state "Not logged in topmenu" as notLoggedIn {
+[*] --> Index
+  state Index
+  state CreateCarport
+  state FlatRoof
+  state AngledRoof
+  state GenerateOrder
+  state Login
+  state SignUp
+  Index --> CreateCarport
+  CreateCarport --> FlatRoof
+  CreateCarport --> AngledRoof
+  FlatRoof --> GenerateOrder
+  AngledRoof --> GenerateOrder
+  GenerateOrder --> Login
+  GenerateOrder --> SignUp
+
+  Index --> Login
+  Index --> SignUp
+  SignUp --> LoggedIn
+  Login --> LoggedIn
+}
+
+state LoggedIn
+
+state "Logged in Customer" as Customer {
+[*] --> Index2
+  state Index2
+  state CreateCarport2
+  state FlatRoof2
+  state AngledRoof2
+  state GenerateOrder2
+  state CreateOrder
+  state Logout
+  Logout --> notLoggedIn
+  Index2 --> Logout
+  Index2 --> CreateCarport2
+  CreateCarport2 --> FlatRoof2
+  CreateCarport2 --> AngledRoof2
+  FlatRoof2 --> GenerateOrder2
+  AngledRoof2 --> GenerateOrder2
+  GenerateOrder2 --> CreateOrder
+}
+
+state "Logged in Admin" as Admin {
+[*] --> Index3
+  state Index3
+  state CreateCarport3
+  state FlatRoof3
+  state AngledRoof3
+  state GenerateOrder3
+  state CreateOrder2
+  state Adminpage
+  state ViewOrders
+  state ReviewOrder
+  state UpdateOrder
+  state Logout
+  Logout --> notLoggedIn
+  Index3 --> Logout
+  Index3 --> CreateCarport3
+  CreateCarport3 --> FlatRoof3
+  CreateCarport3 --> AngledRoof3
+  FlatRoof3 --> GenerateOrder3
+  AngledRoof3 --> GenerateOrder3
+  GenerateOrder3 --> CreateOrder2
+  Index3 --> Adminpage
+  Adminpage --> ViewOrders
+  ViewOrders --> ReviewOrder
+  ReviewOrder --> UpdateOrder
+}
+
+@enduml
