@@ -1,0 +1,31 @@
+@startuml
+
+title Domain - Fog
+
+Class Database
+Class Order {
++Materials
+}
+Class User {
++email
++password
+}
+
+Class Webpage
+
+Class Carport {
++length
++height
++width
++shed
+}
+
+
+Database -- Order : Add to DB
+Order -- User
+
+Webpage -- Carport : Select dimensions
+Carport -- Order : Generate Carport
+
+
+@enduml
