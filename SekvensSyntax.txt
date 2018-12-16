@@ -1,15 +1,57 @@
 @startuml
 
 actor Customer
+boundary index.jsp
 boundary measurementsAngled.jsp
 boundary measurementsFlat.jsp
 boundary shedpage.jsp
 boundary BOMpage.jsp
 
+control FrontController
 
 entity HTMLGenerator
 entity SVGGenerator
+entity CreateCarport
+entity LogicFacade
+entity DBFacade
+entity OrderMapper
+entity MaterialMapper
 
-control FrontController
+database Database
+
+
+Customer -> FrontController : user selects 'Med skråt tag' from topmenu
+FrontController -> HTMLGenerator : 
+activate HTMLGenerator
+HTMLGenerator --> FrontController : 
+deactivate HTMLGenerator
+FrontController --> measurementsAngled.jsp : command 'MeasurementAngled'
+measurementsAngled.jsp -> FrontController : user checks on 'tilføj skur'
+FrontController -> SVGGenerator : generating sketch for shed placement
+activate SVGGenerator
+activate HTMLGenerator
+SVGGenerator -->  FrontController:
+deactivate HTMLGenerator
+deactivate SVGGenerator
+FrontController --> shedpage.jsp : command 'AddShed'
+shedpage.jsp -> FrontController : user clicks 'Fortsæt'
+FrontController -> LogicFacade : an Order is created with the 
+user-selected measurements
+activate CreateCarport
+LogicFacade --> FrontController : return Order
+deactivate CreateCarport
+FrontController -> SVGGenerator : carport sketch is created from Order
+activate HTMLGenerator
+activate SVGGenerator
+SVGGenerator --> FrontController
+deactivate HTMLGenerator
+deactivate SVGGenerator
+FrontController --> BOMpage.jsp : command 'AngledBOM'
+BOMpage.jsp -> FrontController : user clicks 'Godkend' to confirm Order
+FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
+LogicFacade -> DBFacade : addOrderToDB(order)
+DBFacade -> OrderMapper : addOrderToDB(order)
+OrderMapper -> Database : Order is added to database
+
 
 @enduml
