@@ -1,1 +1,15 @@
-hej
+@startuml
+
+actor Customer
+boundary measurementsAngled.jsp
+boundary measurementsFlat.jsp
+boundary shedpage.jsp
+boundary BOMpage.jsp
+
+
+entity HTMLGenerator
+entity SVGGenerator
+
+control FrontController
+
+@enduml
