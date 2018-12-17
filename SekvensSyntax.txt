@@ -1,4 +1,4 @@
-@startuml
+﻿@startuml
 
 actor Customer
 boundary index.jsp
@@ -11,8 +11,8 @@ control FrontController
 
 entity HTMLGenerator
 entity SVGGenerator
-entity CreateCarport
 entity LogicFacade
+entity CreateCarport
 entity DBFacade
 entity OrderMapper
 entity MaterialMapper
@@ -30,16 +30,23 @@ measurementsAngled.jsp -> FrontController : user checks on 'tilføj skur'
 FrontController -> SVGGenerator : generating sketch for shed placement
 activate SVGGenerator
 activate HTMLGenerator
-SVGGenerator -->  FrontController:
+SVGGenerator -->  FrontController :
 deactivate HTMLGenerator
 deactivate SVGGenerator
 FrontController --> shedpage.jsp : command 'AddShed'
 shedpage.jsp -> FrontController : user clicks 'Fortsæt'
-FrontController -> LogicFacade : an Order is created with the 
-user-selected measurements
+FrontController -> LogicFacade : createOrder()
+LogicFacade -> CreateCarport : createOrder()
 activate CreateCarport
-LogicFacade --> FrontController : return Order
+CreateCarport -> DBFacade : getMaterials()
+DBFacade -> MaterialMapper : getMaterials()
+MaterialMapper -> Database : getMaterials()
+Database --> MaterialMapper : return materials
+MaterialMapper --> DBFacade : return materials
+DBFacade --> CreateCarport : return materials
+CreateCarport --> LogicFacade : calculate Order
 deactivate CreateCarport
+LogicFacade --> FrontController : return Order
 FrontController -> SVGGenerator : carport sketch is created from Order
 activate HTMLGenerator
 activate SVGGenerator
