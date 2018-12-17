@@ -1,0 +1,65 @@
+@startuml
+
+actor Admin
+boundary index.jsp
+boundary adminpage.jsp
+boundary reviewpage.jsp
+
+control FrontController
+
+entity HTMLGenerator
+entity SVGGenerator
+entity LogicFacade
+entity CreateCarport
+entity DBFacade
+entity OrderMapper
+entity MaterialMapper
+
+database Database
+
+Admin -> index.jsp
+index.jsp -> FrontController : user selects 'Adminpage' from topmenu
+FrontController -> LogicFacade : getAllOrders()
+LogicFacade -> DBFacade : getAllOrders()
+DBFacade -> OrderMapper : getAllOrders()
+OrderMapper -> Database : getAllOrders()
+Database --> OrderMapper : return Orders
+OrderMapper --> DBFacade : return Orders
+DBFacade --> LogicFacade : return Orders
+LogicFacade -> HTMLGenerator : showAllOrders()
+FrontController -> HTMLGenerator : 
+activate HTMLGenerator
+HTMLGenerator --> FrontController : 
+deactivate HTMLGenerator
+FrontController --> adminpage.jsp : command 'Adminpage'
+adminpage.jsp -> FrontController : user clicks 'Review'
+FrontController -> LogicFacade : getOrderByOrderID()
+LogicFacade -> DBFacade : getOrderByOrderID()
+DBFacade -> OrderMapper : getOrderByOrderID()
+OrderMapper -> Database : getOrderByOrderID()
+Database --> OrderMapper : return Order
+LogicFacade -> CreateCarport : createOrder()
+activate CreateCarport
+CreateCarport -> DBFacade : getMaterials()
+DBFacade -> MaterialMapper : getMaterials()
+MaterialMapper -> Database : getMaterials()
+Database --> MaterialMapper : return materials
+MaterialMapper --> DBFacade : return materials
+DBFacade --> CreateCarport : return materials
+CreateCarport --> LogicFacade : calculateOrder()
+deactivate CreateCarport
+LogicFacade --> FrontController : return Order
+FrontController -> SVGGenerator : carport sketch is created from Order
+activate HTMLGenerator
+activate SVGGenerator
+SVGGenerator --> FrontController
+deactivate HTMLGenerator
+deactivate SVGGenerator
+FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
+LogicFacade -> DBFacade : addOrderToDB(order)
+DBFacade -> OrderMapper : addOrderToDB(order)
+OrderMapper -> Database : Order is added to database
+
+
+@enduml
+
