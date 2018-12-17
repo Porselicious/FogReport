@@ -19,22 +19,14 @@ entity MaterialMapper
 
 database Database
 
-
-Customer -> FrontController : user selects 'Med skråt tag' from topmenu
+Customer -> index.jsp
+index.jsp -> FrontController : user selects 'Med fladt tag' from topmenu
 FrontController -> HTMLGenerator : 
 activate HTMLGenerator
 HTMLGenerator --> FrontController : 
 deactivate HTMLGenerator
-FrontController --> measurementsAngled.jsp : command 'MeasurementAngled'
-measurementsAngled.jsp -> FrontController : user checks on 'tilføj skur'
-FrontController -> SVGGenerator : generating sketch for shed placement
-activate SVGGenerator
-activate HTMLGenerator
-SVGGenerator -->  FrontController :
-deactivate HTMLGenerator
-deactivate SVGGenerator
-FrontController --> shedpage.jsp : command 'AddShed'
-shedpage.jsp -> FrontController : user clicks 'Fortsæt'
+FrontController --> measurementsFlat.jsp : command 'MeasurementFlat'
+measurementsFlat.jsp -> FrontController : user clicks 'Fortsæt'
 FrontController -> LogicFacade : createOrder()
 LogicFacade -> CreateCarport : createOrder()
 activate CreateCarport
@@ -44,7 +36,7 @@ MaterialMapper -> Database : getMaterials()
 Database --> MaterialMapper : return materials
 MaterialMapper --> DBFacade : return materials
 DBFacade --> CreateCarport : return materials
-CreateCarport --> LogicFacade : calculate Order
+CreateCarport --> LogicFacade : calculateOrder()
 deactivate CreateCarport
 LogicFacade --> FrontController : return Order
 FrontController -> SVGGenerator : carport sketch is created from Order
@@ -53,7 +45,7 @@ activate SVGGenerator
 SVGGenerator --> FrontController
 deactivate HTMLGenerator
 deactivate SVGGenerator
-FrontController --> BOMpage.jsp : command 'AngledBOM'
+FrontController --> BOMpage.jsp : command 'FlatBOM'
 BOMpage.jsp -> FrontController : user clicks 'Godkend' to confirm Order
 FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
 LogicFacade -> DBFacade : addOrderToDB(order)
