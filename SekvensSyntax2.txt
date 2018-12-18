@@ -17,8 +17,8 @@ entity MaterialMapper
 
 database Database
 
-Admin -> index.jsp
-index.jsp -> FrontController : user selects 'Adminpage' from topmenu
+Admin -> index.jsp : user selects 'Adminpage' from topmenu
+index.jsp -> FrontController : Command 'Adminpage'
 FrontController -> LogicFacade : getAllOrders()
 LogicFacade -> DBFacade : getAllOrders()
 DBFacade -> OrderMapper : getAllOrders()
@@ -26,19 +26,20 @@ OrderMapper -> Database : getAllOrders()
 Database --> OrderMapper : return Orders
 OrderMapper --> DBFacade : return Orders
 DBFacade --> LogicFacade : return Orders
-LogicFacade -> HTMLGenerator : showAllOrders()
-FrontController -> HTMLGenerator : 
+LogicFacade -> HTMLGenerator : return Orders
 activate HTMLGenerator
-HTMLGenerator --> FrontController : 
+HTMLGenerator -> FrontController : showAllOrders(Orders)
 deactivate HTMLGenerator
-FrontController --> adminpage.jsp : command 'Adminpage'
-adminpage.jsp -> FrontController : user clicks 'Review'
+FrontController --> adminpage.jsp : return adminpage.jsp
+adminpage.jsp -> FrontController : Command 'ReviewOrder'
 FrontController -> LogicFacade : getOrderByOrderID()
 LogicFacade -> DBFacade : getOrderByOrderID()
 DBFacade -> OrderMapper : getOrderByOrderID()
 OrderMapper -> Database : getOrderByOrderID()
 Database --> OrderMapper : return Order
-LogicFacade -> CreateCarport : createOrder()
+OrderMapper --> DBFacade : return Order
+DBFacade --> LogicFacade : return Order
+LogicFacade -> CreateCarport : createCarport(Order)
 activate CreateCarport
 CreateCarport -> DBFacade : getMaterials()
 DBFacade -> MaterialMapper : getMaterials()
@@ -55,11 +56,15 @@ activate SVGGenerator
 SVGGenerator --> FrontController
 deactivate HTMLGenerator
 deactivate SVGGenerator
-FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
-LogicFacade -> DBFacade : addOrderToDB(order)
-DBFacade -> OrderMapper : addOrderToDB(order)
-OrderMapper -> Database : Order is added to database
+FrontController --> reviewpage.jsp : return reviewpage.jsp
+reviewpage.jsp -> FrontController : Command 'UpdateOrder'
+FrontController -> LogicFacade : editOrderPrice()
+FrontController -> LogicFacade : editOrderStatus()
+LogicFacade -> DBFacade : editOrderPrice()
+LogicFacade -> DBFacade : editOrderStatus()
+DBFacade -> OrderMapper : editOrderPrice()
+DBFacade -> OrderMapper : editOrderStatus()
+OrderMapper -> Database : Order is updated in database
 
 
 @enduml
-
