@@ -14,35 +14,32 @@ entity SVGGenerator
 entity LogicFacade
 entity CreateCarport
 entity DBFacade
-entity OrderMapper
-entity MaterialMapper
 
 database Database
 
 
-Customer -> FrontController : user selects 'Med skråt tag' from topmenu
+Customer -> index.jsp : selects 'Med skråt tag' from topmenu
+index.jsp -> FrontController : command 'MeasurementAngled'
 FrontController -> HTMLGenerator : 
 activate HTMLGenerator
 HTMLGenerator --> FrontController : 
 deactivate HTMLGenerator
-FrontController --> measurementsAngled.jsp : command 'MeasurementAngled'
-measurementsAngled.jsp -> FrontController : user checks on 'tilføj skur'
+FrontController --> measurementsAngled.jsp : return measurementsAngled.jsp
+measurementsAngled.jsp -> FrontController : user checks on 'tilføj skur', clicks 'Fortsæt'
 FrontController -> SVGGenerator : generating sketch for shed placement
 activate SVGGenerator
 activate HTMLGenerator
 SVGGenerator -->  FrontController :
 deactivate HTMLGenerator
 deactivate SVGGenerator
-FrontController --> shedpage.jsp : command 'AddShed'
-shedpage.jsp -> FrontController : user clicks 'Fortsæt'
+FrontController --> shedpage.jsp : return shedpage.jsp
+shedpage.jsp -> FrontController : user clicks 'Fortsæt', command 'AddShed'
 FrontController -> LogicFacade : createOrder()
 LogicFacade -> CreateCarport : createOrder()
 activate CreateCarport
 CreateCarport -> DBFacade : getMaterials()
-DBFacade -> MaterialMapper : getMaterials()
-MaterialMapper -> Database : getMaterials()
-Database --> MaterialMapper : return materials
-MaterialMapper --> DBFacade : return materials
+DBFacade -> Database : getMaterials()
+Database --> DBFacade : return materials
 DBFacade --> CreateCarport : return materials
 CreateCarport --> LogicFacade : calculate Order
 deactivate CreateCarport
@@ -54,11 +51,10 @@ SVGGenerator --> FrontController
 deactivate HTMLGenerator
 deactivate SVGGenerator
 FrontController --> BOMpage.jsp : command 'AngledBOM'
-BOMpage.jsp -> FrontController : user clicks 'Godkend' to confirm Order
-FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
-LogicFacade -> DBFacade : addOrderToDB(order)
-DBFacade -> OrderMapper : addOrderToDB(order)
-OrderMapper -> Database : Order is added to database
+BOMpage.jsp -> FrontController : user clicks 'Godkend'
+FrontController -> LogicFacade : LogicFacade.addOrderToDB()
+LogicFacade -> DBFacade : addOrderToDB()
+DBFacade -> Database : addOrderToDB()
 
 
 @enduml

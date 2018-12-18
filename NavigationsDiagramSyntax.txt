@@ -38,9 +38,15 @@ state "Logged in Customer" as Customer {
   state GenerateOrder2
   state CreateOrder
   state Logout
+  state Customerpage
+  state ViewOrders
+  state ReviewOrder
   Logout --> notLoggedIn
   Index2 --> Logout
   Index2 --> CreateCarport2
+  Index2 --> Customerpage
+  Customerpage --> ViewOrders
+  ViewOrders --> ReviewOrder
   CreateCarport2 --> FlatRoof2
   CreateCarport2 --> AngledRoof2
   FlatRoof2 --> GenerateOrder2
@@ -57,12 +63,12 @@ state "Logged in Admin" as Admin {
   state GenerateOrder3
   state CreateOrder2
   state Adminpage
-  state ViewOrders
-  state ReviewOrder
+  state ViewOrders2
+  state ReviewOrder2
   state UpdateOrder
-  state Logout
-  Logout --> notLoggedIn
-  Index3 --> Logout
+  state Logout2
+  Logout2 --> notLoggedIn
+  Index3 --> Logout2
   Index3 --> CreateCarport3
   CreateCarport3 --> FlatRoof3
   CreateCarport3 --> AngledRoof3
@@ -70,9 +76,9 @@ state "Logged in Admin" as Admin {
   AngledRoof3 --> GenerateOrder3
   GenerateOrder3 --> CreateOrder2
   Index3 --> Adminpage
-  Adminpage --> ViewOrders
-  ViewOrders --> ReviewOrder
-  ReviewOrder --> UpdateOrder
+  Adminpage --> ViewOrders2
+  ViewOrders2 --> ReviewOrder2
+  ReviewOrder2 --> UpdateOrder
 }
 
 @enduml

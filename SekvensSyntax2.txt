@@ -28,7 +28,7 @@ OrderMapper --> DBFacade : return Orders
 DBFacade --> LogicFacade : return Orders
 LogicFacade -> HTMLGenerator : return Orders
 activate HTMLGenerator
-HTMLGenerator -> FrontController : showAllOrders(Orders)
+HTMLGenerator -> FrontController : showAllOrders()
 deactivate HTMLGenerator
 FrontController --> adminpage.jsp : return adminpage.jsp
 adminpage.jsp -> FrontController : Command 'ReviewOrder'
@@ -39,7 +39,7 @@ OrderMapper -> Database : getOrderByOrderID()
 Database --> OrderMapper : return Order
 OrderMapper --> DBFacade : return Order
 DBFacade --> LogicFacade : return Order
-LogicFacade -> CreateCarport : createCarport(Order)
+LogicFacade -> CreateCarport : createCarport()
 activate CreateCarport
 CreateCarport -> DBFacade : getMaterials()
 DBFacade -> MaterialMapper : getMaterials()

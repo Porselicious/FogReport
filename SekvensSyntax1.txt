@@ -14,27 +14,23 @@ entity SVGGenerator
 entity LogicFacade
 entity CreateCarport
 entity DBFacade
-entity OrderMapper
-entity MaterialMapper
 
 database Database
 
-Customer -> index.jsp
-index.jsp -> FrontController : user selects 'Med fladt tag' from topmenu
+Customer -> index.jsp : selects 'Med fladt tag' from topmenu
+index.jsp -> FrontController : Command 'measurementFlat'
 FrontController -> HTMLGenerator : 
 activate HTMLGenerator
 HTMLGenerator --> FrontController : 
 deactivate HTMLGenerator
-FrontController --> measurementsFlat.jsp : command 'MeasurementFlat'
-measurementsFlat.jsp -> FrontController : user clicks 'Fortsæt'
+FrontController --> measurementsFlat.jsp : return measurementsFlat.jsp
+measurementsFlat.jsp -> FrontController : user clicks 'Fortsæt', command 'FlatBOM'
 FrontController -> LogicFacade : createOrder()
 LogicFacade -> CreateCarport : createOrder()
 activate CreateCarport
 CreateCarport -> DBFacade : getMaterials()
-DBFacade -> MaterialMapper : getMaterials()
-MaterialMapper -> Database : getMaterials()
-Database --> MaterialMapper : return materials
-MaterialMapper --> DBFacade : return materials
+DBFacade -> Database : getMaterials()
+Database --> DBFacade : return materials
 DBFacade --> CreateCarport : return materials
 CreateCarport --> LogicFacade : calculateOrder()
 deactivate CreateCarport
@@ -45,12 +41,11 @@ activate SVGGenerator
 SVGGenerator --> FrontController
 deactivate HTMLGenerator
 deactivate SVGGenerator
-FrontController --> BOMpage.jsp : command 'FlatBOM'
-BOMpage.jsp -> FrontController : user clicks 'Godkend' to confirm Order
-FrontController -> LogicFacade : LogicFacade.addOrderToDB(order)
-LogicFacade -> DBFacade : addOrderToDB(order)
-DBFacade -> OrderMapper : addOrderToDB(order)
-OrderMapper -> Database : Order is added to database
+FrontController --> BOMpage.jsp : return BOMpage.jsp
+BOMpage.jsp -> FrontController : clicks 'Godkend'
+FrontController -> LogicFacade : LogicFacade.addOrderToDB()
+LogicFacade -> DBFacade : addOrderToDB()
+DBFacade -> Database : addOrderToDB()
 
 
 @enduml
