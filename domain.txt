@@ -1,14 +1,12 @@
 @startuml
 
-title Domain - Fog
-
 Class Database
 Class Order {
-+Materials
++Carport
++User
 }
 Class User {
-+email
-+password
++Role
 }
 
 Class Webpage
@@ -20,12 +18,13 @@ Class Carport {
 +shed
 }
 
-
-Database -- Order : Add to DB
-Order -- User
-
-Webpage -- Carport : Select dimensions
-Carport -- Order : Generate Carport
+User --> Webpage : User chooses measurements
+Webpage --> Carport : Design Carport
+Database <-- Order : Save to DB
+Order <-- Database : Fetch from DB
+Order <-- Carport : An order is created
+Order --> Carport : Carport is created from order
+Carport --> Webpage : Carport is generated
 
 
 @enduml
